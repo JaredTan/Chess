@@ -10,7 +10,8 @@ class Display
     @board = board
   end
 
-  def render
+  def render(player)
+    system("clear")
     pos = @cursor.cursor_pos
     no_color_grid = @board.grid.map do |row|
       row.map { |piece| (piece.is_a?(NullPiece) ? "   " : piece.to_s) }
@@ -32,6 +33,7 @@ class Display
     no_color_grid.each do |row|
       puts row.join
     end
+    puts "#{player.name}'s move. Color: #{player.color}"
   end
 
 

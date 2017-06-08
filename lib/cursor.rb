@@ -33,14 +33,16 @@ MOVES = {
 class Cursor
 
   attr_reader :cursor_pos, :board, :selected
+  attr_accessor :finished_move
 
   def initialize(cursor_pos, board)
     @cursor_pos = cursor_pos
     @board = board
     @selected = false
+    @finished_move = false
   end
 
-  def get_input
+  def get_input(color)
     key = KEYMAP[read_char]
     # # if @selected
     # #   until key == :return || key == :space
@@ -48,7 +50,7 @@ class Cursor
     # #     key = KEYMAP[read_char]
     # #   end
     # end
-    handle_key(key)
+    handle_key(key, color)
   end
 
   private
@@ -82,7 +84,7 @@ class Cursor
     return input
   end
 
-  def handle_key(key)
+  def handle_key(key, color)
     case key
     when :left, :right, :up, :down
       update_pos(MOVES[key])
@@ -102,10 +104,11 @@ class Cursor
       Process.exit(0)
     end
     if @from_pos && @to_pos
-      @board.move_piece(:white, @from_pos, @to_pos)
+      @board.move_piece(color, @from_pos, @to_pos)
       @to_pos = nil
       @from_pos = nil
       @selected = false
+      @finished_move = true
     end
   end
 
